@@ -29,11 +29,14 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Install Android SDK
-        uses: android-actions/setup-android@v3
+      - name: Android SDK location
+        run: |
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          which sdkmanager
+          sdkmanager --version
 
       - name: Install Android 35
-        run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
+        run: yes | sdkmanager "platforms;android-35" "build-tools;35.0.0" || test ${PIPESTATUS[1]} -eq 0
 
       - name: Install Gradle 8.9
         uses: gradle/actions/setup-gradle@v4
