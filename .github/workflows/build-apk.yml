@@ -32,11 +32,12 @@ jobs:
       - name: Android SDK location
         run: |
           echo "ANDROID_HOME=$ANDROID_HOME"
-          which sdkmanager
-          sdkmanager --version
+          SDKMANAGER=$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | head -n 1)
+          echo "SDKMANAGER=$SDKMANAGER" >> "$GITHUB_ENV"
+          "$SDKMANAGER" --version
 
       - name: Install Android 35
-        run: yes | sdkmanager "platforms;android-35" "build-tools;35.0.0" || test ${PIPESTATUS[1]} -eq 0
+        run: "$SDKMANAGER" "platforms;android-35" "build-tools;35.0.0"
 
       - name: Install Gradle 8.9
         uses: gradle/actions/setup-gradle@v4
