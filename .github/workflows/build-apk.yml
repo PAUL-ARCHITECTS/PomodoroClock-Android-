@@ -1,4 +1,4 @@
-name: Build Pomodoro v1.9 APK (Android 7 to 17)
+name: Build Pomodoro v1.9.1 APK (Android 7 to 17)
 on:
   push:
     branches: [main]
@@ -21,7 +21,7 @@ jobs:
           tar -xJf source.tar.xz
           test -s app/src/main/AndroidManifest.xml
 
-      - name: Upgrade to v1.9 (API 24–37) and build adaptive icon
+      - name: Upgrade to v1.9.1 (API 24–37) and build adaptive icon
         run: |
           python3 -m pip install --user pillow
           python3 scripts/upgrade-v19.py
@@ -51,11 +51,11 @@ jobs:
         run: gradle --no-daemon --stacktrace assembleDebug
 
       - name: Collect APK
-        run: cp app/build/outputs/apk/debug/app-debug.apk PomodoroClock-v1.9-Android7-17.apk
+        run: cp app/build/outputs/apk/debug/app-debug.apk PomodoroClock-v1.9.1-Android7-17.apk
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: PomodoroClock-v1.9-Android7-17
-          path: PomodoroClock-v1.9-Android7-17.apk
+          name: PomodoroClock-v1.9.1-Android7-17
+          path: PomodoroClock-v1.9.1-Android7-17.apk
           if-no-files-found: error
