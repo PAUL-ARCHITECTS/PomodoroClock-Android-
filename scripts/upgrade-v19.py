@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Bring the v1.8 packaged project to the Android 7–17 v1.9 release target."""
+"""Bring the v1.8 packaged project to the Android 7–17 v1.9.1 release target."""
 from pathlib import Path
 from textwrap import dedent
 p=Path(".")
@@ -14,8 +14,8 @@ java=p/"app/src/main/java/com/pomodoro/focus"
             applicationId 'com.pomodoro.focus'
             minSdk 24
             targetSdk 37
-            versionCode 11
-            versionName '1.9'
+            versionCode 12
+            versionName '1.9.1'
         }
     }
 """))
@@ -51,6 +51,17 @@ s=s.replace('        view.loadUrl("file:///android_asset/index.html");',
 f.write_text(s)
 manifest=p/"app/src/main/AndroidManifest.xml"
 s=manifest.read_text().replace('@drawable/ic_launcher','@mipmap/ic_launcher')
+# Route the Quick Settings tile LONG PRESS to the main timer Activity
+# instead of Android's application settings/details screen.
+launcher_end = '''                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>'''
+long_press_filter = '''            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>'''
+if 'android.service.quicksettings.action.QS_TILE_PREFERENCES' not in s:
+    assert launcher_end in s, "Can't find launcher intent filter"
+    s=s.replace(launcher_end, launcher_end + "\\n" + long_press_filter, 1)
 manifest.write_text(s)
 # Adaptive icon: no double rounded-square / white backing on Android 8+
 res=p/"app/src/main/res"
