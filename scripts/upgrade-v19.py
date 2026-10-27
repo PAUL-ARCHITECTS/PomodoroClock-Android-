@@ -61,7 +61,7 @@ long_press_filter = '''            <intent-filter>
             </intent-filter>'''
 if 'android.service.quicksettings.action.QS_TILE_PREFERENCES' not in s:
     assert launcher_end in s, "Can't find launcher intent filter"
-    s=s.replace(launcher_end, launcher_end + "\\n" + long_press_filter, 1)
+    s=s.replace(launcher_end, launcher_end + "\n" + long_press_filter, 1)
 manifest.write_text(s)
 # Adaptive icon: no double rounded-square / white backing on Android 8+
 res=p/"app/src/main/res"
